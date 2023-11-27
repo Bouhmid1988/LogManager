@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  logmanager.api:
+    image: logmanagerapi
+    build:
+      context: .
+      dockerfile: LogManager.Api/Dockerfile
+    ports:
+      - "5279:80"
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=db;Database=LogManagerDB;Username=postgres;Password=Admin"
+  db:
+    container_name: db
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Admin
+      - POSTGRES_DB=LogManagerDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
